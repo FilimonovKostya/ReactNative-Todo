@@ -1,7 +1,7 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
-import { Button, NativeBaseProvider } from 'native-base'
+import { Checkbox, NativeBaseProvider } from 'native-base'
 
 type TaskType = {
   id: number
@@ -13,39 +13,55 @@ export default function App() {
   const [tasks, setTasks] = React.useState<TaskType[]>([
     {
       id: 1,
-      title: 'React',
+      title: 'HTML',
       isDone: true,
     },
     {
       id: 2,
-      title: 'React Native',
+      title: 'CSS',
       isDone: false,
     },
     {
       id: 3,
-      title: 'ApolloClient',
-      isDone: false,
-    },
-    {
-      id: 4,
-      title: 'Redux',
+      title: 'React Native',
       isDone: true,
     },
   ])
+  const changeStatusTask = (id: number, isDone: boolean) => {
+    const newStatusTask = tasks.map((task) =>
+      task.id === id
+        ? {
+            ...task,
+            isDone,
+          }
+        : { ...task }
+    )
+    setTasks(newStatusTask)
+  }
 
   return (
-    <View style={styles.container}>
-      {tasks.map((task, index) => (
-        <View key={index}>
-          <Text>{task.title}</Text>
-          <Text>{task.isDone}</Text>
-        </View>
-      ))}
-      <NativeBaseProvider>
-        <Button onPress={() => console.log('hello world')}>Click Me</Button>
-      </NativeBaseProvider>
+    <NativeBaseProvider>
       <StatusBar style='auto' />
-    </View>
+      <View style={styles.container}>
+        <View>
+          {tasks.map((task, index) => (
+            <View key={index}>
+              <Text>{task.isDone}</Text>
+              <Checkbox
+                value={task.title}
+                isChecked={task.isDone}
+                onChange={(isSelected) => {
+                  changeStatusTask(task.id, isSelected)
+                }}
+                accessibilityLabel='This is a dummy checkbox'
+              >
+                {task.title}
+              </Checkbox>
+            </View>
+          ))}
+        </View>
+      </View>
+    </NativeBaseProvider>
   )
 }
 
