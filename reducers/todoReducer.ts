@@ -7,7 +7,7 @@ type TaskType = {
 }
 
 export const addTaskAC = createAction<{ title: string }>('todo/addTask')
-export const changeStatusAC = createAction<{ id: number }>('todo/changeStatusAC')
+export const changeStatusAC = createAction<{ id: number, isDone:boolean }>('todo/changeStatusAC')
 
 const initialState: TaskType[] = [{
     id: 1,
@@ -33,10 +33,15 @@ const slice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder => {
-        builder.addCase(addTaskAC, ((state, action) => {
-            const newTask: TaskType = {id: state.length + 1, title: action.payload.title, isDone: false}
-            state.push(newTask)
-        }))
+        builder
+            .addCase(addTaskAC, ((state, action) => {
+                const newTask: TaskType = {id: state.length + 1, title: action.payload.title, isDone: false}
+                state.push(newTask)
+            }))
+            .addCase(changeStatusAC, (((state, action) => {
+                const index = state.findIndex(task => task.id === action.payload.id)
+                state[index].isDone = action.payload.isDone
+            })))
     })
 })
 

@@ -2,7 +2,7 @@ import React from 'react'
 import {Animated, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import Checkbox from 'expo-checkbox'
 import {useAppDispatch, useAppSelector} from './store'
-import {addTaskAC} from './reducers/todoReducer'
+import {addTaskAC, changeStatusAC} from './reducers/todoReducer'
 
 const Main = () => {
     const tasks = useAppSelector((state) => state.reducer)
@@ -18,8 +18,7 @@ const Main = () => {
     const [inputField, setInputField] = React.useState('')
 
     const changeStatusTask = (id: number, isDone: boolean) => {
-        const newStatusTask = tasks.map((task) => (task.id === id ? {...task, isDone} : task))
-        // setTasks(newStatusTask)
+        dispatch(changeStatusAC({id, isDone}))
     }
 
     const startAnimated = (show: boolean) => {
@@ -46,7 +45,6 @@ const Main = () => {
 
     const addTask = () => {
         dispatch(addTaskAC({title: inputField}))
-        // setTasks([newTask, ...tasks])
         setInputField('')
         close()
     }
