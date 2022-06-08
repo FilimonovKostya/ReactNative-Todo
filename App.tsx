@@ -1,7 +1,7 @@
 import React from 'react'
 import Checkbox from 'expo-checkbox'
 import { StatusBar } from 'expo-status-bar'
-import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
+import { Animated, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { NativeBaseProvider } from 'native-base'
 
 type TaskType = {
@@ -44,6 +44,7 @@ export default function App() {
   const startAnimated = (show: boolean) => {
     if (show) {
       Animated.timing(animatedValue, {
+
         toValue: 1,
         useNativeDriver: true,
       }).start()
@@ -53,6 +54,22 @@ export default function App() {
         useNativeDriver: true,
       }).start()
     }
+  }
+
+  const close = () => {
+    Animated.timing(animatedValue, {
+      toValue: 0,
+      duration:200,
+      useNativeDriver: true,
+    }).start()
+  }
+
+  const addTask = () => {
+    const newTask: TaskType = { id: tasks.length + 1, isDone: false, title: inputField }
+
+    setTasks([newTask, ...tasks])
+    setInputField('')
+    close()
   }
 
   return (
@@ -90,9 +107,9 @@ export default function App() {
             value={inputField}
             onChangeText={setInputField}
           />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={addTask}>
             <View style={styles.button}>
-              <Text style={{color:'white', fontSize:18}}>Add</Text>
+              <Text style={{ color: 'white', fontSize: 18 }}>Add</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -138,9 +155,9 @@ const styles = StyleSheet.create({
   inputBox: {
     height: 80,
     backgroundColor: '#2279f1',
-    justifyContent:'center',
-    alignItems:'center',
-    flexDirection: 'row'
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   input: {
     width: 200,
@@ -148,13 +165,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     fontSize: 18,
     borderRadius: 5,
-    paddingHorizontal:7
+    paddingHorizontal: 7,
   },
-  button:{
-    marginLeft:13,
-    backgroundColor: '#1f19c4',
+  button: {
     paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 4
-  }
+  },
 })
