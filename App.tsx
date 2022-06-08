@@ -1,7 +1,7 @@
 import React from 'react'
 import Checkbox from 'expo-checkbox'
 import { StatusBar } from 'expo-status-bar'
-import { Animated, StyleSheet, Text, View } from 'react-native'
+import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
 import { NativeBaseProvider } from 'native-base'
 
 type TaskType = {
@@ -31,9 +31,10 @@ export default function App() {
   const animatedValue = React.useRef(new Animated.Value(0)).current
   const translateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -300],
+    outputRange: [0, -80],
   })
   const [show, setShow] = React.useState(true)
+  const [inputField, setInputField] = React.useState('')
 
   const changeStatusTask = (id: number, isDone: boolean) => {
     const newStatusTask = tasks.map((task) => (task.id === id ? { ...task, isDone } : task))
@@ -82,8 +83,18 @@ export default function App() {
             }}
           />
         </View>
-        <View style={{ height: 80, backgroundColor: '#a13ce3' }}>
-          <Text>Input</Text>
+        <View style={styles.inputBox}>
+          <TextInput
+            placeholder='enter your task'
+            style={styles.input}
+            value={inputField}
+            onChangeText={setInputField}
+          />
+          <TouchableOpacity>
+            <View style={styles.button}>
+              <Text style={{color:'white', fontSize:18}}>Add</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </Animated.View>
     </NativeBaseProvider>
@@ -118,10 +129,32 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   separator: {
-    width: 100,
-    height: 15,
+    width: 170,
+    height: 30,
     backgroundColor: 'white',
     overflow: 'hidden',
-    borderRadius: 15 / 2,
+    borderRadius: 30 / 2,
   },
+  inputBox: {
+    height: 80,
+    backgroundColor: '#2279f1',
+    justifyContent:'center',
+    alignItems:'center',
+    flexDirection: 'row'
+  },
+  input: {
+    width: 200,
+    height: 32,
+    backgroundColor: 'white',
+    fontSize: 18,
+    borderRadius: 5,
+    paddingHorizontal:7
+  },
+  button:{
+    marginLeft:13,
+    backgroundColor: '#1f19c4',
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 4
+  }
 })
