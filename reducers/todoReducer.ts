@@ -1,6 +1,6 @@
 import {createAction, createSlice} from '@reduxjs/toolkit'
 
-type TaskType = {
+export type TaskType = {
     id: number
     title: string
     isDone: boolean
