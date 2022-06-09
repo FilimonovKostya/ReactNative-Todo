@@ -27,11 +27,13 @@ const Main = () => {
     if (show) {
       Animated.timing(animatedValue, {
         toValue: 1,
+        duration:200,
         useNativeDriver: true,
       }).start()
     } else {
       Animated.timing(animatedValue, {
         toValue: 0,
+        duration:200,
         useNativeDriver: true,
       }).start()
     }

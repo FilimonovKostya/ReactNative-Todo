@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
-import { TaskType } from '../../reducers/todoReducer'
+import { removeTaskAC, TaskType } from '../../reducers/todoReducer'
+import { useAppDispatch } from '../../store'
 
 type TodoItemProps = {
   tasks: TaskType[]
@@ -9,15 +10,21 @@ type TodoItemProps = {
 }
 
 const TodoItem = ({ tasks, changeStatusTask }: TodoItemProps) => {
+  const dispatch = useAppDispatch()
+  const deleteTask = (id: number) => dispatch(removeTaskAC({ id }))
+
   return (
     <View style={styles.container}>
-      {tasks.map((task, index) => (
+      {tasks.map((task) => (
         <View key={task.id} style={styles.row}>
           <Checkbox
             value={task.isDone}
             onValueChange={(value) => changeStatusTask(task.id, value)}
           />
           <Text style={styles.text}>{task.title}</Text>
+          <TouchableOpacity style={styles.button} onPress={() => deleteTask(task.id)}>
+            <Text style={styles.icon}>X</Text>
+          </TouchableOpacity>
         </View>
       ))}
     </View>
@@ -45,6 +52,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
     fontWeight: 'bold',
+  },
+  button: {
+    position: 'absolute',
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    backgroundColor: '#ff1744',
+    borderRadius: 5,
+    right: 15,
+  },
+  icon: {
+    fontSize: 18,
+    color: 'white',
   },
 })
 
